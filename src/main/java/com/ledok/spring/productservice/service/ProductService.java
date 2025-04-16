@@ -16,6 +16,8 @@ public interface ProductService {
         ProductDto getProductById(Long id);
         List<ProductDto> getProductsByIds(List<Long> ids);
         boolean checkProductsAvailability(Map<Long, Integer> productQuantities);
+        ProductDto updateProduct(Long id, ProductDto productDto);
+        void deleteProduct(Long id);
     }
 //    // Основные CRUD операции
 //    ProductResponse createProduct(ProductRequest productRequest);

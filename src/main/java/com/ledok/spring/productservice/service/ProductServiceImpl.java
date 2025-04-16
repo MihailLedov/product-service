@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,6 +63,30 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return true;
+    }
+
+    @Override
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
+        if (productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Продукт не найден");
+        }
+        Optional<ProductEntity> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            ProductEntity productEntity = product.get();
+            productEntity.setId(productDto.getId());
+            productEntity.setName(productDto.getName());
+            productEntity.setDescription(productDto.getDescription());
+            productEntity.setCategory(productDto.getCategory());
+            productEntity.setPrice(productDto.getPrice());
+            productEntity.setStock(productDto.getStock());
+            return productMapper.toDto(productRepository.save(productEntity));
+        }
+        throw new ProductNotFoundException("Продукт не найден");
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.delete(productRepository.findById(id));
     }
 }
 //    private final ProductRepository productRepository;

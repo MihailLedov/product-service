@@ -7,6 +7,7 @@ import com.ledok.spring.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +47,16 @@ public class ProductController {
     @PostMapping("/check-availability")
     boolean checkProductsAvailability(@RequestBody Map<Long, Integer> productQuantities){
         return productService.checkProductsAvailability(productQuantities);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.ok(productService.updateProduct(id,productDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductEntity> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
